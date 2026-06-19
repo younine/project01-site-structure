@@ -1,0 +1,93 @@
+.login-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+}
+
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px 36px;
+  width: 360px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+
+.login-logo {
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+}
+
+.login-sub {
+  color: var(--text3);
+  font-size: 13px;
+  margin-bottom: 28px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.login-field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+}
+
+.login-field input {
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--surface);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.login-field input:focus {
+  border-color: var(--accent);
+}
+
+.login-error {
+  background: var(--danger-dim);
+  color: var(--danger);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 12px;
+}
+
+.login-submit {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 0;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 4px;
+  transition: opacity 0.15s;
+}
+
+.login-submit:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.login-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

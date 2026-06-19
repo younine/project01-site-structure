@@ -1,0 +1,239 @@
+.ms-root {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* ── 툴바 ── */
+.ms-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+  flex-wrap: wrap;
+}
+.ms-toolbar-gap { flex: 1; }
+
+.ms-btn {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #fff;
+  color: #1a1d23;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .15s;
+  font-family: inherit;
+}
+.ms-btn:hover   { background: #f0f2f5; }
+.ms-btn.danger  { color: #dc2626; border-color: #fecaca; }
+.ms-btn.danger:hover { background: #fef2f2; }
+.ms-btn:disabled    { opacity: .4; cursor: not-allowed; }
+
+.ms-save-btn {
+  padding: 5px 16px;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .15s;
+  font-family: inherit;
+}
+.ms-save-btn:hover    { background: #1d4ed8; }
+.ms-save-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.ms-msg {
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.ms-msg.ok  { color: #16a34a; }
+.ms-msg.err { color: #dc2626; }
+
+/* ── 스프레드시트 래퍼 ── */
+.ms-wrap {
+  overflow: auto;
+  outline: none;
+  cursor: default;
+  user-select: none;
+  max-height: 480px;
+}
+
+/* ── 테이블 ── */
+.ms-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  min-width: max-content;
+  width: 100%;
+  font-size: 12px;
+}
+
+.ms-table thead tr {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.ms-table th {
+  background: #f8f9fa;
+  border-right: 1px solid rgba(0,0,0,0.07);
+  border-bottom: 2px solid rgba(0,0,0,0.1);
+  padding: 7px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9399a8;
+  text-align: left;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.ms-th-num {
+  background: #f8f9fa;
+  border-right: 1px solid rgba(0,0,0,0.1);
+  border-bottom: 2px solid rgba(0,0,0,0.1);
+  width: 28px;
+}
+
+/* ── 체크박스 열 ── */
+.ms-th-chk {
+  width: 34px;
+  text-align: center;
+  background: #f8f9fa;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.ms-td-chk {
+  width: 34px;
+  text-align: center;
+  background: #f8f9fa;
+  border-right: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  vertical-align: middle;
+}
+
+.ms-row-selected td { background: #dbeafe !important; }
+
+/* ── 행 번호 ── */
+.ms-td-num {
+  background: #f8f9fa;
+  border-right: 1px solid rgba(0,0,0,0.1);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  color: #9399a8;
+  font-size: 10px;
+  text-align: right;
+  padding: 0 4px;
+  height: 28px;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+.ms-td-num:hover { background: #e9ecef; }
+
+.ms-row-num { display: inline; }
+.ms-td-num:hover .ms-row-num { display: none; }
+
+.ms-insert-btn {
+  display: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid #adb5bd;
+  background: #fff;
+  color: #5a6072;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+.ms-td-num:hover .ms-insert-btn { display: flex; }
+.ms-insert-btn:hover { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+/* ── 데이터 셀 ── */
+.ms-cell {
+  border-right: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  height: 28px;
+  padding: 0;
+  vertical-align: middle;
+  position: relative;
+  overflow: hidden;
+}
+.ms-cell:last-child { border-right: none; }
+.ms-cell.sel { background: #dbeafe; }
+.ms-cell.anc {
+  outline: 2px solid #2563eb;
+  outline-offset: -2px;
+}
+
+.ms-cell-val {
+  display: block;
+  padding: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 28px;
+  color: #1a1d23;
+}
+
+.ms-cell-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0 8px;
+  border: 2px solid #2563eb;
+  outline: none;
+  background: #fff;
+  font-size: 12px;
+  font-family: inherit;
+  color: #1a1d23;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+/* ── 자동 연동 셀 ── */
+.ms-cell.auto-price {
+  background: #f0f7ff;
+}
+.ms-cell.auto-price .ms-cell-val {
+  color: #2563eb;
+}
+.ms-auto-tag {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  color: #2563eb;
+  background: #dbeafe;
+  border-radius: 3px;
+  padding: 1px 4px;
+  margin-left: 4px;
+  vertical-align: middle;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+/* ── 힌트 ── */
+.ms-hint {
+  padding: 5px 12px;
+  font-size: 10px;
+  color: #9399a8;
+  background: #f8f9fa;
+  border-top: 1px solid rgba(0,0,0,0.07);
+}

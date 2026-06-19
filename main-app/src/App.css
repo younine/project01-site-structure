@@ -1,0 +1,261 @@
+@import "https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600&display=swap";
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f4f5f7;
+  --surface: #fff;
+  --surface2: #f8f9fa;
+  --border: rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.13);
+  --text: #1a1d23;
+  --text2: #5a6072;
+  --text3: #9399a8;
+  --accent: #2563eb;
+  --accent-dim: #eff6ff;
+  --success: #16a34a;
+  --success-dim: #f0fdf4;
+  --warning: #d97706;
+  --warning-dim: #fffbeb;
+  --danger: #dc2626;
+  --danger-dim: #fef2f2;
+  --info: #0891b2;
+  --info-dim: #ecfeff;
+  --sidebar-w: 220px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-family: 'Pretendard', -apple-system, sans-serif;
+  font-size: 13px;
+}
+
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: inherit; }
+
+/* ── 레이아웃 ── */
+.app-shell {
+  min-height: 100vh;
+  padding: 16px;
+}
+.main {
+  margin-left: calc(var(--sidebar-w) + 16px);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.content { flex: 1; padding: 16px 0 0; }
+.half-card { width: 25%; }
+
+/* ── 햄버거 버튼 (모바일에서만 표시) ── */
+.hamburger-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--border2);
+  border-radius: 7px;
+  padding: 5px 9px;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--text);
+}
+
+/* ── 모바일 반응형 ── */
+@media (max-width: 900px) {
+  .app-shell { padding: 8px; }
+  .main { margin-left: 0; }
+  .hamburger-btn { display: flex; }
+  .half-card { width: 100%; }
+  .topbar { top: 8px; padding: 0 14px; }
+  .sync-time { display: none; }
+  th { font-size: 11px; }
+
+  /* 쿠팡 카드: 모바일에서 그리드로 변환 */
+  .coup-body { display: grid; grid-template-columns: repeat(3, 1fr); padding: 12px; gap: 0; }
+  .coup-divider { display: none; }
+  .coup-item { padding: 8px 6px; justify-content: center; flex-direction: column; align-items: center; gap: 3px; text-align: center; border-right: 1px solid var(--border); }
+  .coup-item:last-child { border-right: none; }
+  .coup-item.coup-time { grid-column: 1 / -1; flex-direction: row; justify-content: center; border-right: none; border-top: 1px solid var(--border); padding: 6px; }
+  .coup-label { font-size: 11px; }
+  .coup-val { font-size: 16px; }
+  .dot { display: none; }
+
+  /* 신제품 테이블: 모바일 카드 변환 */
+  .newproducts-table thead { display: none; }
+  .newproducts-table tr {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2px 8px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .newproducts-table tr:last-child { border-bottom: none; }
+  .newproducts-table tr:hover { background: var(--surface2); }
+  .newproducts-table td {
+    display: block;
+    border: none;
+    padding: 0;
+    white-space: normal;
+    font-size: 12px;
+  }
+  /* 브랜드: 1행 1열 */
+  .newproducts-table td:nth-child(1) { grid-column: 1; grid-row: 1; align-self: center; }
+  /* 모델명: 1행 2열 */
+  .newproducts-table td:nth-child(2) { grid-column: 2; grid-row: 1; font-size: 13px; font-weight: 500; min-width: 0; }
+  /* 스펙: 2행 전체 */
+  .newproducts-table td:nth-child(3) { grid-column: 1 / -1; grid-row: 2; font-size: 11px; color: var(--text3); }
+  /* 판매가: 3행 1열 */
+  .newproducts-table td:nth-child(4) {
+    grid-column: 1; grid-row: 3;
+    text-align: left;
+    font-size: 11px; color: var(--text2);
+  }
+  .newproducts-table td:nth-child(4)::before { content: attr(data-label) " "; color: var(--text3); font-size: 10px; }
+  /* 자사모델: 숨김 */
+  .newproducts-table td:nth-child(5) { display: none; }
+  /* 자사가: 숨김 */
+  .newproducts-table td:nth-child(6) { display: none; }
+  /* 차이: 숨김 */
+  .newproducts-table td:nth-child(7) { display: none; }
+  /* 차이율: 3행 2열 */
+  .newproducts-table td:nth-child(8) {
+    grid-column: 2; grid-row: 3;
+    text-align: left;
+    font-size: 12px; font-weight: 600;
+  }
+  .model-name { min-width: 0; }
+}
+
+@media (max-width: 480px) {
+  th { font-size: 11px; padding: 6px 8px; }
+  td { padding: 5px 8px; }
+  .coup-val { font-size: 14px; }
+  .brand-rank-item { padding: 5px 10px; }
+  .card-header { padding: 10px 12px; }
+}
+
+/* ── 상단바 ── */
+.topbar {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px;
+  display: flex; justify-content: space-between; align-items: center;
+  height: 52px; padding: 0 24px;
+  position: sticky; top: 16px; z-index: 40;
+}
+.topbar-title { color: var(--text); font-size: 14px; font-weight: 600; }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.sync-time { color: var(--text3); font-size: 11px; }
+.status-badge {
+  color: var(--success); background: var(--success-dim);
+  border-radius: 99px; padding: 3px 10px; font-size: 11px;
+}
+.refresh-btn {
+  border: 1px solid var(--border2); background: var(--surface);
+  color: var(--text); border-radius: 7px; padding: 5px 12px;
+  font-size: 12px; transition: all 0.15s;
+}
+.refresh-btn:hover { background: var(--surface2); }
+.refresh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── 카드 ── */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; margin-bottom: 12px; overflow: hidden;
+}
+.card-header {
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 16px;
+}
+.card-title { color: var(--text); font-size: 13px; font-weight: 500; }
+.card-link { color: var(--info); font-size: 11px; }
+.card-link:hover { text-decoration: underline; }
+
+/* ── 테이블 ── */
+.tbl-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 12px; }
+th {
+  text-align: left; color: var(--text3); background: var(--surface2);
+  border-bottom: 1px solid var(--border); white-space: nowrap;
+  text-transform: uppercase; letter-spacing: 0.3px;
+  padding: 7px 10px; font-size: 10px; font-weight: 500;
+}
+td { border-bottom: 1px solid var(--border); vertical-align: middle; white-space: nowrap; padding: 6px 10px; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface2); }
+
+.brand-tag {
+  background: var(--surface2); color: var(--text2);
+  border: 1px solid var(--border2); border-radius: 99px;
+  padding: 2px 7px; font-size: 10px;
+}
+.model-name { min-width: 200px; }
+.spec { color: var(--text3); white-space: nowrap; }
+.model-link { color: inherit; text-decoration: none; }
+.model-link:hover { color: var(--accent); text-decoration: underline; }
+.our-model { color: var(--info); font-size: 11px; }
+.price-col { text-align: right; font-variant-numeric: tabular-nums; }
+.up { color: var(--success); font-weight: 500; }
+.down { color: var(--danger); font-weight: 500; }
+.empty { text-align: center; color: var(--text3); padding: 32px; font-size: 12px; }
+
+/* ── 네이버 브랜드 순위 ── */
+.card-sub { color: var(--text3); font-size: 11px; }
+.brand-rank-body { padding: 8px 0; }
+.brand-rank-list { list-style: none; }
+.brand-rank-more {
+  display: block; width: 100%; padding: 7px 0;
+  font-size: 11px; color: var(--text3);
+  background: none; border: none; border-top: 1px solid var(--border);
+  cursor: pointer; transition: background 0.15s;
+}
+.brand-rank-more:hover { background: var(--surface2); color: var(--text); }
+.brand-rank-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 12px; font-size: 12px;
+  break-inside: avoid;
+}
+.brand-rank-item:hover { background: var(--surface2); }
+.brand-rank-no { width: 20px; text-align: right; color: var(--text3); font-size: 11px; font-variant-numeric: tabular-nums; }
+.brand-rank-status { width: 14px; text-align: center; font-size: 11px; }
+.rank-up   { color: var(--danger); }
+.rank-down { color: var(--info); }
+.rank-new  { color: var(--warning); font-weight: 700; font-size: 10px; }
+.brand-rank-name { color: var(--text); font-size: 12px; }
+.brand-rank-name:hover { color: var(--accent); text-decoration: underline; }
+.rank-refresh-btn {
+  border: 1px solid var(--border2); background: var(--surface);
+  color: var(--text3); border-radius: 6px; padding: 2px 7px;
+  font-size: 12px; cursor: pointer; transition: all 0.15s;
+}
+.rank-refresh-btn:hover { background: var(--surface2); color: var(--text); }
+.rank-refresh-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── 쿠팡 카드 ── */
+.coup-card { margin-bottom: 0; }
+.coup-body { display: flex; flex-wrap: wrap; align-items: center; padding: 10px 16px; }
+.coup-item { display: flex; align-items: center; gap: 6px; padding: 4px 12px; }
+.coup-item.coup-time { margin-left: auto; }
+.coup-divider { background: var(--border2); width: 1px; height: 16px; }
+.dot { border-radius: 50%; flex-shrink: 0; width: 7px; height: 7px; }
+.dot-success { background: var(--success); }
+.dot-warning { background: var(--warning); }
+.dot-danger  { background: var(--danger); }
+.coup-label  { color: var(--text2); font-size: 12px; }
+.coup-val    { color: var(--text); font-size: 14px; font-weight: 500; }
+.coup-val.warn   { color: var(--warning); }
+.coup-val.danger { color: var(--danger); }
+.coup-val-sm { color: var(--text3); font-size: 11px; }
+
+.auth-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text3);
+  font-size: 13px;
+  background: var(--bg);
+}

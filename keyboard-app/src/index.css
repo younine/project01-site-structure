@@ -1,0 +1,32 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f4f5f7;
+  --bg2: #ffffff;
+  --border: rgba(0,0,0,0.08);
+  --text: #1a1d23;
+  --text2: #5a6072;
+  --text3: #9399a8;
+  --accent: #2563eb;
+  --up: #dc2626;
+  --down: #16a34a;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+#root { min-height: 100vh; }
+a { color: inherit; }
+button { cursor: pointer; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 900px) {
+  body { overflow-x: hidden; }
+}
+
+@media (max-width: 480px) {
+  .topbar-right { gap: 8px; font-size: 11px; }
+}

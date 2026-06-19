@@ -1,0 +1,216 @@
+/* 페이지 스크롤 제거: main이 뷰포트를 꽉 채우게 */
+.main {
+  height: calc(100vh - 32px); /* app-shell padding 16px × 2 */
+  overflow: hidden;
+}
+@media (max-width: 768px) {
+  .main { height: calc(100vh - 16px); } /* mobile: padding 8px × 2 */
+  .sheet-toolbar { padding: 8px 12px; gap: 8px; }
+  .sheet-table th { font-size: 11px; }
+}
+
+@media (max-width: 480px) {
+  .sheet-toolbar-left { flex-wrap: wrap; }
+  .btn-sheet { padding: 6px 10px; font-size: 12px; }
+  .cell-input { font-size: 12px; padding: 6px 6px; }
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  padding: 16px 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── 제품 스프레드시트 ── */
+.product-sheet {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sheet-toolbar {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  z-index: 10;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sheet-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sheet-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sheet-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.sheet-count {
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--surface2);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.sheet-msg { font-size: 11px; color: var(--success); }
+.sheet-msg-err { color: var(--danger); }
+
+.btn-sheet {
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 7px;
+  padding: 5px 12px;
+  font-size: 12px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn-sheet:hover:not(:disabled) { background: var(--surface2); }
+.btn-sheet:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-save {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.btn-save:hover:not(:disabled) { opacity: 0.88; background: var(--accent); }
+
+.btn-del:not(:disabled) { border-color: var(--danger); color: var(--danger); }
+.btn-del:not(:disabled):hover { background: var(--danger-dim); }
+
+.paste-hint {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--text3);
+  padding: 5px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+/* sheet-wrap이 남은 공간을 채우며 자체 스크롤 — 헤더가 항상 상단 고정 */
+.sheet-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.sheet-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+}
+
+.sheet-table th {
+  text-align: left;
+  color: var(--text3);
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 7px 8px;
+  font-size: 10px;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.sheet-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 2px 4px;
+  vertical-align: middle;
+}
+
+.sheet-table tr:last-child td { border-bottom: none; }
+.sheet-table tr:hover td { background: var(--surface2); }
+.sheet-table tr.row-selected td { background: var(--accent-dim); }
+.sheet-table tr.row-selected:hover td { background: #dbeafe; }
+
+.sheet-td-num {
+  background: var(--surface2);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  color: var(--text3);
+  font-size: 10px;
+  text-align: center;
+  width: 34px;
+  vertical-align: middle;
+  cursor: default;
+  user-select: none;
+  padding: 0 4px;
+}
+.sheet-td-num:hover { background: #e9ecef; }
+
+.sheet-row-num { display: inline; }
+.sheet-td-num:hover .sheet-row-num { display: none; }
+
+.sheet-insert-btn {
+  display: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  color: var(--text2);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+.sheet-td-num:hover .sheet-insert-btn { display: flex; }
+.sheet-insert-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.cell-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  color: var(--text);
+  padding: 5px 6px;
+  font-family: inherit;
+  outline: none;
+}
+.cell-input:focus {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.cell-input[readonly] {
+  cursor: default;
+  color: var(--text2);
+}
+
+.empty {
+  text-align: center;
+  color: var(--text3);
+  padding: 32px;
+  font-size: 12px;
+}

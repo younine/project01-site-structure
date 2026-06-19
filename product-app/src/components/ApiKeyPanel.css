@@ -1,0 +1,50 @@
+.apikey-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+  z-index: 100;
+}
+.apikey-panel {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 480px; max-width: 92vw;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  display: flex; flex-direction: column;
+  z-index: 101;
+}
+
+.apikey-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.apikey-title { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; }
+.apikey-close {
+  width: 28px; height: 28px; border-radius: 6px;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-dim); cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.apikey-close:hover { background: var(--surface2); color: var(--text); }
+
+.apikey-body { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+
+.apikey-field { display: flex; flex-direction: column; gap: 6px; }
+.apikey-label { font-size: 11px; color: var(--text3); font-weight: 600; }
+.apikey-row { display: flex; gap: 8px; align-items: center; }
+.apikey-value {
+  flex: 1; min-width: 0;
+  font-size: 12px; padding: 8px 10px;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+  overflow-x: auto; white-space: nowrap; color: var(--text);
+  font-family: ui-monospace, monospace;
+}
+.apikey-copy {
+  padding: 7px 12px; border-radius: 6px; flex-shrink: 0;
+  border: 1px solid var(--border2); background: var(--surface2); color: var(--text);
+  font-size: 12px; cursor: pointer; white-space: nowrap; transition: all .15s;
+}
+.apikey-copy:hover { background: var(--surface); }
+
+.apikey-hint { font-size: 11px; color: var(--text3); }
+.apikey-loading { font-size: 12px; color: var(--text3); }
+.apikey-error   { font-size: 12px; color: var(--danger); }

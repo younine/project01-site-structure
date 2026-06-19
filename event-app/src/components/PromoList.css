@@ -1,0 +1,111 @@
+.plist-summary {
+  display: flex;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+.psum-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
+}
+
+.psum-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-active   { background: var(--success); }
+.dot-ending   { background: var(--warning); }
+.dot-upcoming { background: var(--info); }
+.dot-done     { background: var(--text3); }
+
+.psum-label { font-size: 10px; color: var(--text3); }
+.psum-val   { font-size: 12px; font-weight: 600; color: var(--text); margin-left: auto; }
+.psum-val.warn  { color: var(--warning); }
+.psum-val.muted { color: var(--text3); }
+
+.plist-body { overflow-y: auto; max-height: 280px; }
+.plist-empty { padding: 20px; text-align: center; color: var(--text3); font-size: 12px; }
+
+.prow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s;
+  gap: 8px;
+}
+.prow:last-child { border-bottom: none; }
+.prow:hover      { background: var(--surface2); }
+.prow.selected   { background: var(--accent-dim); }
+
+.prow-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.prow-plat {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.prow-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.prow-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prow-detail {
+  font-size: 10px;
+  color: var(--text3);
+}
+
+.prow-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.prow-status {
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+.st-active   { background: var(--success-dim); color: var(--success); }
+.st-ending   { background: var(--warning-dim); color: var(--warning); }
+.st-upcoming { background: var(--info-dim);    color: var(--info); }
+.st-done     { background: var(--surface2);    color: var(--text3); }
+
+.prow-dday {
+  font-size: 10px;
+  color: var(--text3);
+  font-variant-numeric: tabular-nums;
+}

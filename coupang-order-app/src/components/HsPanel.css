@@ -1,0 +1,166 @@
+/* ── 패널 공통 ── */
+.hs-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+  z-index: 100; animation: hsFadeIn .15s;
+}
+.hs-panel {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: 560px; max-width: 100vw;
+  background: var(--surface); border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  animation: hsSlideIn .2s ease;
+  z-index: 101;
+}
+@keyframes hsFadeIn  { from { opacity: 0; }              to { opacity: 1; } }
+@keyframes hsSlideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+.hs-panel-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.hs-panel-title { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; }
+.hs-panel-close {
+  width: 28px; height: 28px; border-radius: 6px;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-dim); cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.hs-panel-close:hover { background: var(--surface2); color: var(--text); }
+
+.hs-stat-badge {
+  padding: 3px 9px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+}
+.hs-stat-badge.server { background: #dcfce7; color: #16a34a; }
+.hs-stat-badge.none   { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
+
+/* ── 툴바 ── */
+.hs-toolbar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 12px; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.hs-toolbar-gap { flex: 1; }
+.hs-count { font-size: 11px; color: var(--text-muted); margin-right: 4px; }
+
+.hs-btn {
+  padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 500;
+  border: 1px solid var(--border2); background: var(--surface2); color: var(--text2);
+  cursor: pointer; transition: all .15s;
+}
+.hs-btn:hover   { background: var(--surface); color: var(--text); }
+.hs-btn.danger:hover { background: var(--danger-dim); color: var(--danger); border-color: var(--danger); }
+.hs-btn:disabled    { opacity: .4; cursor: not-allowed; }
+
+.hs-save-btn {
+  padding: 6px 14px; border-radius: 6px;
+  background: var(--accent); color: #fff;
+  border: none; font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all .15s;
+  font-family: inherit;
+}
+.hs-save-btn:hover    { filter: brightness(1.08); }
+.hs-save-btn:disabled { opacity: .5; cursor: not-allowed; filter: none; }
+
+.hs-msg {
+  font-size: 12px; padding: 6px 14px; flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+}
+.hs-msg.ok  { color: var(--success); background: var(--success-dim); }
+.hs-msg.err { color: var(--danger);  background: var(--danger-dim);  }
+
+/* ── 스프레드시트 ── */
+.hs-sheet-wrap {
+  flex: 1; overflow: auto;
+  outline: none;
+  cursor: default;
+  user-select: none;
+}
+
+.hs-sheet {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  min-width: max-content;
+  font-size: 12px;
+}
+
+/* 헤더 */
+.hs-sheet thead tr {
+  position: sticky; top: 0; z-index: 2;
+}
+.hs-sheet th {
+  background: var(--surface2);
+  border-right: 1px solid var(--border);
+  border-bottom: 2px solid var(--border2);
+  padding: 6px 8px;
+  font-size: 11px; font-weight: 600; color: var(--text2);
+  text-align: left; white-space: nowrap;
+}
+.hs-th-num {
+  background: var(--surface2);
+  border-right: 1px solid var(--border2);
+  border-bottom: 2px solid var(--border2);
+  width: 34px;
+}
+
+/* 행 번호 열 */
+.hs-td-num {
+  background: var(--surface2);
+  border-right: 1px solid var(--border2);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 10px; text-align: right;
+  padding: 0 6px 0 0;
+  height: 28px; vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+}
+.hs-td-num:hover { background: #e2e8f0; }
+
+/* 데이터 셀 */
+.hs-cell {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  height: 28px; padding: 0;
+  vertical-align: middle;
+  position: relative;
+  overflow: hidden;
+}
+.hs-cell.sel {
+  background: #dbeafe;
+}
+.hs-cell.anc {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.hs-cell:last-child { border-right: none; }
+
+.hs-cell-val {
+  display: block;
+  padding: 0 8px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  line-height: 28px; color: var(--text);
+}
+
+.hs-cell-input {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  padding: 0 8px;
+  border: 2px solid var(--accent);
+  outline: none; background: #fff;
+  font-size: 12px; font-family: inherit; color: var(--text);
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+/* ── 힌트 ── */
+.hs-sheet-hint {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  font-size: 10px; color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  background: var(--surface2);
+}
