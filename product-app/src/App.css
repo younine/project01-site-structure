@@ -18,7 +18,8 @@
 .content {
   flex: 1;
   min-height: 0;
-  padding: 16px 0 0;
+  padding: 0;
+  margin-top: 12px;
   display: flex;
   flex-direction: column;
 }
@@ -125,10 +126,11 @@
 }
 
 .sheet-table th {
-  text-align: left;
+  text-align: center;
   color: var(--text3);
   background: var(--surface2);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border2);
+  border-right: 1px solid var(--border);
   white-space: nowrap;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -139,17 +141,21 @@
   top: 0;
   z-index: 5;
 }
+.sheet-table th:last-child { border-right: none; }
 
 .sheet-table td {
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border2);
+  border-right: 1px solid var(--border);
   padding: 2px 4px;
   vertical-align: middle;
 }
+.sheet-table td:last-child { border-right: none; }
 
 .sheet-table tr:last-child td { border-bottom: none; }
-.sheet-table tr:hover td { background: var(--surface2); }
-.sheet-table tr.row-selected td { background: var(--accent-dim); }
-.sheet-table tr.row-selected:hover td { background: #dbeafe; }
+.sheet-table tbody tr:nth-child(even) td { background: var(--surface2); }
+.sheet-table tr:hover td { background: #e8edf5 !important; }
+.sheet-table tr.row-selected td { background: var(--accent-dim) !important; }
+.sheet-table tr.row-selected:hover td { background: #dbeafe !important; }
 
 .sheet-td-num {
   background: var(--surface2);
@@ -214,3 +220,78 @@
   padding: 32px;
   font-size: 12px;
 }
+
+/* ── 제품/마켓 탭 ── */
+.product-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 12px 0 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.product-tab {
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text3);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: -1px;
+}
+
+.product-tab:hover { color: var(--text); }
+
+.product-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+.btn-import {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ── 검색창 ── */
+.sheet-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sheet-search {
+  border: 1px solid var(--border2);
+  border-radius: 7px;
+  background: var(--surface2);
+  color: var(--text);
+  font-size: 12px;
+  padding: 5px 28px 5px 10px;
+  width: 260px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.sheet-search:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-dim, #dbeafe);
+  background: #fff;
+}
+.sheet-search::placeholder { color: var(--text3); }
+
+.sheet-search-clear {
+  position: absolute;
+  right: 7px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text3);
+  font-size: 11px;
+  padding: 0;
+  line-height: 1;
+}
+.sheet-search-clear:hover { color: var(--text); }

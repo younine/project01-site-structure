@@ -1591,13 +1591,14 @@ function mapToRegisterFields(row) {
 
   fields['상품명'] = row.product_name || '';
 
-  // inch: "40cm(16인치)" → split
+  // inch: "40cm(16인치)" → split, cm 단위 붙여서 저장
   const inchMatch = (row.inch || '').match(/^([\d.]+)cm\(([\d.]+)인치\)/);
   if (inchMatch) {
-    fields['화면크기(cm)'] = inchMatch[1];
-    fields['화면크기(in)'] = inchMatch[2];
+    fields['화면크기(cm)'] = inchMatch[1] + 'cm';
+    fields['화면크기(in)'] = inchMatch[2] + 'in';
   } else {
-    fields['화면크기(cm)'] = row.inch || '';
+    const rawCm = (row.inch || '').replace(/[^0-9.]/g, '');
+    fields['화면크기(cm)'] = rawCm ? rawCm + 'cm' : '';
     fields['화면크기(in)'] = '';
   }
 
@@ -1607,8 +1608,9 @@ function mapToRegisterFields(row) {
   const resPrefix = (row.resolution || '').split('(')[0].trim();
   fields['해상도'] = RES_PREFIX_MAP[resPrefix] || resPrefix;
 
-  // refresh_rate: "144Hz" → "144"
-  fields['화면 재생빈도(Hz)'] = (row.refresh_rate || '').replace(/[^0-9]/g, '');
+  // refresh_rate: "144Hz" → "144Hz"
+  const hzNum = (row.refresh_rate || '').replace(/[^0-9]/g, '');
+  fields['화면 재생빈도(Hz)'] = hzNum ? hzNum + 'Hz' : '';
 
   const panel = row.panel || '';
   fields['모니터 패널']    = normalizePanel(panel);
@@ -1620,8 +1622,9 @@ function mapToRegisterFields(row) {
   fields['품질보증기준']   = warranty;
   fields['제조사 품질보증'] = warranty;
 
-  // brightness: "500nits" → "500"
-  fields['밝기'] = (row.brightness || '').replace(/[^0-9.]/g, '');
+  // brightness: "250nits" → "250nit"
+  const brNum = (row.brightness || '').match(/[\d.]+/);
+  fields['밝기'] = brNum ? brNum[0] + 'nit' : '';
 
   // registration_month: "2024/03" → split
   const ymMatch = (row.registration_month || '').match(/^(\d{4})\/(\d{2})$/);
@@ -1639,21 +1642,25 @@ function mapToRegisterFields(row) {
 
   const spec = row.full_spec || '';
 
-  // 응답속도: "1ms" 패턴
-  const msMatch = spec.match(/(\d+(?:\.\d+)?)\s*ms/i);
-  fields['응답속도'] = msMatch ? msMatch[1] + 'ms' : '';
+  // 응답속도(AR열): 가이드 "숫자 값만 입력" → ms 제외한 숫자만
+  // 최대응답속도(AM열): 가이드 예시 "1ms(GtG), 4ms" → ms 포함
+  // 응답속도: "4ms(OD)" / "1ms(MPRT)" 등 원본 형식 그대로
+  // 최대응답속도: ms 포함 숫자+단위 (예: "4ms")
+  const msMatches = [...spec.matchAll(/(\d+(?:\.\d+)?)\s*ms(?:\([^)]+\))?/gi)];
+  fields['응답속도']    = msMatches[0] ? msMatches[0][0].trim() : '';
+  fields['최대응답속도'] = msMatches[1] ? msMatches[1][1] + 'ms' : (msMatches[0] ? msMatches[0][1] + 'ms' : '');
 
   // HDMI 포트 개수
   const hdmiMatches = spec.match(/HDMI/gi);
-  fields['HDMI 포트 개수'] = hdmiMatches ? String(hdmiMatches.length) : '0';
+  fields['HDMI 포트 개수'] = (hdmiMatches ? hdmiMatches.length : 0) + '개';
 
   // DisplayPort 수
   const dpMatches = spec.match(/DisplayPort|(?<![A-Za-z])DP(?![A-Za-z])/gi);
-  fields['Display Port 단자개수'] = dpMatches ? String(dpMatches.length) : '0';
+  fields['Display Port 단자개수'] = (dpMatches ? dpMatches.length : 0) + '개';
 
   // USB Type-C 수
   const ucMatches = spec.match(/USB\s*C타입/gi);
-  fields['USB Type-C 단자 개수'] = ucMatches ? String(ucMatches.length) : '0';
+  fields['USB Type-C 단자 개수'] = (ucMatches ? ucMatches.length : 0) + '개';
 
   // 스피커 내장 — 드롭다운은 "스피커 장착" 단일 옵션뿐, 해당 없으면 공란
   fields['모니터 자체스피커 장착여부'] = /스피커\s*내장/i.test(spec) ? '스피커 장착' : '';
@@ -1785,6 +1792,18 @@ app.post('/api/coupang/register/download', requireAuth, requireCoupangViewer, (r
   if (catSettings.as_contact) {
     rows.forEach(r => { r['A/S 책임자와 전화번호'] = catSettings.as_contact; });
   }
+
+  // mm → cm 단위 변환 (아이템 높이, 아이템 깊이)
+  const mmToCm = val => {
+    const m = String(val).match(/^([\d.]+)\s*mm$/i);
+    if (!m) return val;
+    const cm = parseFloat(m[1]) / 10;
+    return (Number.isInteger(cm) ? cm : parseFloat(cm.toFixed(1))) + 'cm';
+  };
+  rows.forEach(r => {
+    if (r['아이템 높이']) r['아이템 높이'] = mmToCm(r['아이템 높이']);
+    if (r['아이템 깊이']) r['아이템 깊이'] = mmToCm(r['아이템 깊이']);
+  });
 
   const payload = JSON.stringify({ action: 'download', template_path: tplPath, rows });
   const py = spawn('python3', [path.join(__dirname, 'register_xls.py')]);
@@ -1941,6 +1960,47 @@ app.delete('/api/coupang/register/template', requireAuth, requireAdmin, (req, re
   if (!fs.existsSync(filePath)) return res.status(404).json({ error: '파일이 없습니다' });
   fs.unlinkSync(filePath);
   res.json({ ok: true, templates: listTemplates(category.trim()).map(f => ({ name: f.name, label: tplLabel(f.name), mtime: f.mtime })) });
+});
+
+// ── Community 게시글 수집 ───────────────────────────────────────────────────
+const communityRoutes = require('./community/routes');
+const { startCommunityScheduler } = require('./community/scheduler');
+app.use('/api/community', communityRoutes);
+startCommunityScheduler();
+
+// ── 행사 캘린더 자동 동기화 ───────────────────────────────────────────────
+const cron = require('node-cron');
+const { syncEvents } = require('./services/eventSync');
+
+/* POST /api/events/sync — 수동 즉시 동기화 (관리자 전용) */
+app.post('/api/events/sync', requireAuth, requireAdmin, async (req, res) => {
+  try {
+    const result = await syncEvents();
+    res.json({ ok: true, ...result });
+  } catch (err) {
+    console.error('[eventSync] 수동 동기화 오류:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 1시간마다 자동 동기화
+cron.schedule('0 * * * *', async () => {
+  console.log('[eventSync] 자동 동기화 시작');
+  try {
+    await syncEvents();
+  } catch (err) {
+    console.error('[eventSync] 자동 동기화 오류:', err.message);
+  }
+});
+
+// 서버 시작 시 1회 즉시 실행
+setImmediate(async () => {
+  console.log('[eventSync] 시작 시 초기 동기화');
+  try {
+    await syncEvents();
+  } catch (err) {
+    console.error('[eventSync] 초기 동기화 오류:', err.message);
+  }
 });
 
 app.listen(PORT, () => {

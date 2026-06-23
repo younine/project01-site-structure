@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: '/keyboard/',
-  build: { outDir: '/var/www/html/keyboard', emptyOutDir: false },
+  build: { outDir: 'dist', emptyOutDir: false },
   server: {
     proxy: {
       '/api': 'http://localhost:3000',

@@ -1,0 +1,65 @@
+@import "https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600&display=swap";
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f4f5f7;
+  --surface: #fff;
+  --surface2: #f8f9fa;
+  --border: rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.13);
+  --text: #1a1d23;
+  --text2: #5a6072;
+  --text3: #9399a8;
+  --accent: #2563eb;
+  --accent-dim: #eff6ff;
+  --success: #16a34a;
+  --success-dim: #f0fdf4;
+  --warning: #d97706;
+  --warning-dim: #fffbeb;
+  --danger: #dc2626;
+  --danger-dim: #fef2f2;
+  --info: #0891b2;
+  --info-dim: #ecfeff;
+  --sidebar-w: 220px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-family: 'Pretendard', -apple-system, sans-serif;
+  font-size: 13px;
+}
+
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: inherit; }
+
+.app-shell { min-height: 100vh; padding: 16px; }
+.main { margin-left: calc(var(--sidebar-w) + 16px); min-width: 0; display: flex; flex-direction: column; }
+.content { flex: 1; padding: 16px 0 0; }
+
+.hamburger-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--border2);
+  border-radius: 7px;
+  padding: 5px 9px;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--text);
+}
+
+@media (max-width: 900px) {
+  .app-shell { padding: 8px; }
+  .main { margin-left: 0; }
+  .hamburger-btn { display: flex; }
+}
+
+.auth-loading {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; font-size: 14px; color: var(--text3);
+  flex-direction: column; gap: 8px;
+}
