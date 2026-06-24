@@ -9,6 +9,7 @@
 | URL 경로 | 앱 디렉토리 | 설명 | 권한 |
 |---|---|---|---|
 | `/` | `main-app` | 메인 대시보드 | 로그인 필요 |
+| `/community/` | `main-app` | 커뮤니티 게시글 수집 | 누구나 |
 | `/login` | `main-app` | 로그인 페이지 | 누구나 |
 | `/admin-settings/` | `main-app` | 관리자 설정 | admin 전용 |
 | `/monitor.html` | 정적 파일 | 가격 모니터 (별도 HTML) | 누구나 |
@@ -141,6 +142,9 @@ App
 **특수 라우트:**
 - `/login` → `LoginPage` (아이디/비밀번호 입력 폼)
 - `/admin-settings/` → `AdminSettings` (사용자 관리 패널, admin 전용)
+- `/community/` → `CommunityPage` (커뮤니티 게시글 수집 — 별도 앱 없이 main-app이 경로 감지 후 렌더링, 비로그인 접근 허용)
+  - 소스: `src/components/CommunityPage.jsx`, `PostList.jsx`, `SettingsPanel.jsx`, `authFetch.js`
+  - nginx `/community/` 블록이 `/index.html`(main-app)으로 폴백
 
 ---
 
