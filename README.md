@@ -8,8 +8,7 @@
 
 | URL 경로 | 앱 디렉토리 | 설명 | 권한 |
 |---|---|---|---|
-| `/` | `main-app` | 메인 대시보드 | 로그인 필요 |
-| `/community/` | `main-app` | 커뮤니티 게시글 수집 | 누구나 |
+| `/`, `/login`, `/admin-settings/`, `/community/` | `main-app` | 대시보드·로그인·관리자설정·커뮤니티 수집 | 경로별 상이 |
 | `/login` | `main-app` | 로그인 페이지 | 누구나 |
 | `/admin-settings/` | `main-app` | 관리자 설정 | admin 전용 |
 | `/monitor.html` | 정적 파일 | 가격 모니터 (별도 HTML) | 누구나 |
@@ -139,12 +138,17 @@ App
     └── NaverBrandRank    → 네이버 브랜드 랭킹 요약
 ```
 
-**특수 라우트:**
-- `/login` → `LoginPage` (아이디/비밀번호 입력 폼)
-- `/admin-settings/` → `AdminSettings` (사용자 관리 패널, admin 전용)
-- `/community/` → `CommunityPage` (커뮤니티 게시글 수집 — 별도 앱 없이 main-app이 경로 감지 후 렌더링, 비로그인 접근 허용)
-  - 소스: `src/components/CommunityPage.jsx`, `PostList.jsx`, `SettingsPanel.jsx`, `authFetch.js`
-  - nginx `/community/` 블록이 `/index.html`(main-app)으로 폴백
+**내부 라우팅 (`window.location.pathname` 감지):**
+
+| 경로 | 컴포넌트 | 접근 |
+|---|---|---|
+| `/` | 대시보드 (NewProducts, CoupangCard, NaverBrandRank) | 로그인 필요 |
+| `/login` | LoginPage | 누구나 |
+| `/admin-settings/` | AdminSettings | admin 전용 |
+| `/community/` | CommunityPage | 누구나 (비로그인 허용) |
+
+`/community/`는 별도 빌드 파일 없이 main-app 단일 번들이 처리한다. nginx `/community/` 블록이 `try_files $uri $uri/ /index.html`로 main-app을 서빙하고, React가 경로를 보고 `CommunityPage`를 렌더링한다.
+커뮤니티 소스: `src/components/CommunityPage.jsx`, `PostList.jsx`, `SettingsPanel.jsx`, `authFetch.js`
 
 ---
 
