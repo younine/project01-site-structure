@@ -6,6 +6,7 @@ import NewProducts from './components/NewProducts';
 import NaverBrandRank from './components/NaverBrandRank';
 import LoginPage from './components/LoginPage';
 import AdminSettings from './components/AdminSettings';
+import CommunityPage from './components/CommunityPage';
 import './App.css';
 
 function TopBar({ lastUpdated, onRefresh, loading, onMenuClick }) {
@@ -85,6 +86,17 @@ export default function App() {
   const pathname = window.location.pathname;
   const isLoginRoute = pathname === '/login';
   const isAdminSettings = /^\/admin-settings(\/)?$/.test(pathname);
+  const isCommunity = /^\/community(\/|$)/.test(pathname);
+
+  if (isCommunity) {
+    return (
+      <CommunityPage
+        user={user}
+        hasPermission={hasPermission}
+        onLogout={async () => { await logout(); window.location.reload(); }}
+      />
+    );
+  }
 
   if (authLoading) {
     return <div className="auth-loading">로딩 중...</div>;
