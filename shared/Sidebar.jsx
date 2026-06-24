@@ -121,7 +121,7 @@ export default function Sidebar({
     .filter(s => user && s.permissions.some(p => hasPermission(p)))
     .map(s => ({ ...s, items: s.items.filter(item => hasPermission(item.permission)) }));
 
-  const allSections = [...BASE_NAV, ...(user ? COMMUNITY_NAV : []), ...permSections, ...(user ? EVENT_NAV : []), ...(user ? PRODUCT_NAV : [])];
+  const allSections = [...BASE_NAV, ...COMMUNITY_NAV, ...permSections, ...(user ? EVENT_NAV : []), ...(user ? PRODUCT_NAV : [])];
 
   function handleLogout() {
     if (onLogout) {
