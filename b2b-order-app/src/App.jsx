@@ -9,7 +9,6 @@ import SettingsEditor from './components/SettingsEditor';
 import { useAuth } from './hooks/useAuth';
 
 const isSettings = /\/b2b-order\/settings(\/)?$/.test(window.location.pathname);
-
 function VendorCard({ id, title, color, children }) {
   return (
     <div id={id} className="vendor-card">
@@ -49,6 +48,7 @@ function useScrollActiveHash(ready) {
 
   return activeHash;
 }
+
 
 export default function App() {
   const { user, loading, hasPermission, logout } = useAuth();
