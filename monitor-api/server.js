@@ -10,6 +10,10 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const multer = require('multer');
+const ExcelJS = require('exceljs');
+const { Client: NotionClient } = require('@notionhq/client');
+
+const notion = new NotionClient({ auth: process.env.NOTION_TOKEN });
 
 const app = express();
 const PORT = 3000;
@@ -1380,7 +1384,26 @@ function requireProductEditor(req, res, next) {
 }
 
 app.get('/api/products', requireAuth, requireProductViewer, (req, res) => {
-  res.json(readProducts());
+  const data = readProducts();
+  const products = (data.products || []).map(p => ({
+    ...p,
+    naverCode:      p.naverCode      ?? '',
+    catalogCode:    p.catalogCode    ?? '',
+    gmarketCode:    p.gmarketCode    ?? '',
+    auctionCode:    p.auctionCode    ?? '',
+    gmarketAnyCode: p.gmarketAnyCode ?? '',
+    auctionAnyCode: p.auctionAnyCode ?? '',
+    elevenCode:     p.elevenCode     ?? '',
+    himartCode:     p.himartCode     ?? '',
+    lotteCode:      p.lotteCode      ?? '',
+    ssgCode:        p.ssgCode        ?? '',
+    aliCode:        p.aliCode        ?? '',
+    odCode:         p.odCode         ?? '',
+    kakaoCode:      p.kakaoCode      ?? '',
+    compuzoneCode:  p.compuzoneCode  ?? '',
+    coupangItemId:  p.coupangItemId  ?? '',
+  }));
+  res.json({ products, updatedAt: data.updatedAt || null });
 });
 
 app.post('/api/products', requireAuth, requireProductEditor, (req, res) => {
@@ -1407,9 +1430,24 @@ app.get('/api/products/feed-info', requireAuth, requireAdmin, (req, res) => {
 app.get('/api/products/feed', requireApiKey, (req, res) => {
   const data = readProducts();
   const products = (data.products || []).map(p => ({
-    skuId: p.skuId || '',
-    modelName: p.modelName || '',
-    salePrice: p.salePrice || '',
+    skuId:          p.skuId          || '',
+    modelName:      p.modelName      || '',
+    salePrice:      p.salePrice      || '',
+    naverCode:      p.naverCode      || '',
+    catalogCode:    p.catalogCode    || '',
+    gmarketCode:    p.gmarketCode    || '',
+    auctionCode:    p.auctionCode    || '',
+    gmarketAnyCode: p.gmarketAnyCode || '',
+    auctionAnyCode: p.auctionAnyCode || '',
+    elevenCode:     p.elevenCode     || '',
+    himartCode:     p.himartCode     || '',
+    lotteCode:      p.lotteCode      || '',
+    ssgCode:        p.ssgCode        || '',
+    aliCode:        p.aliCode        || '',
+    odCode:         p.odCode         || '',
+    kakaoCode:      p.kakaoCode      || '',
+    compuzoneCode:  p.compuzoneCode  || '',
+    coupangItemId:  p.coupangItemId  || '',
   }));
   res.json({ products, updatedAt: data.updatedAt || null });
 });
@@ -1457,9 +1495,81 @@ function migrateToPromotions(events) {
   return promotions;
 }
 
+const PLATFORM_CODE_FIELD = {
+  '쿠팡': 'skuId', '네이버': 'naverCode', '카탈로그': 'catalogCode',
+  '지마켓': 'gmarketCode', '옥션': 'auctionCode',
+  '지마켓any': 'gmarketAnyCode', '옥션any': 'auctionAnyCode',
+  '11번가': 'elevenCode', '하이마트': 'himartCode',
+  '롯데온': 'lotteCode', 'SSG': 'ssgCode', '알리': 'aliCode',
+  '오늘의집': 'odCode', '카카오': 'kakaoCode', '컴퓨존': 'compuzoneCode',
+};
+
+function enrichEvents(promotions) {
+  const products = readProducts().products || [];
+
+  // 정확한 modelName 맵
+  const productMap = {};
+  products.forEach(p => { if (p.modelName) productMap[p.modelName] = p; });
+
+  // baseCode 맵: "TFG24F14P2" → { 일반: product, 무결점: product }
+  const baseCodeMap = {};
+  products.forEach(p => {
+    const m = (p.modelName || '').match(/^(.+)_(일반|무결점)$/);
+    if (m) {
+      const [, base, variant] = m;
+      if (!baseCodeMap[base]) baseCodeMap[base] = {};
+      baseCodeMap[base][variant] = p;
+    }
+  });
+  const baseCodes = Object.keys(baseCodeMap).sort((a, b) => b.length - a.length);
+
+  // modelCode에 variant가 명시되어 있는지 여부
+  function hasVariantSuffix(modelCode) {
+    return /_(일반|무결점)$/.test(modelCode) || modelCode.includes('무결점');
+  }
+
+  // variant 미명시 시 존재하는 모든 variant 반환, 명시 시 해당 variant만 반환
+  function findProducts(modelCode) {
+    if (!modelCode) return [];
+    // 1. 정확히 일치
+    if (productMap[modelCode]) return [productMap[modelCode]];
+    // 2. baseCode 퍼지 매칭
+    for (const base of baseCodes) {
+      if (modelCode.includes(base)) {
+        const entry = baseCodeMap[base];
+        if (hasVariantSuffix(modelCode)) {
+          const variant = modelCode.includes('무결점') ? '무결점' : '일반';
+          const p = entry[variant] || entry['일반'];
+          return p ? [p] : [];
+        }
+        // variant 미명시: 존재하는 모든 variant (일반 → 무결점 순)
+        return ['일반', '무결점'].map(v => entry[v]).filter(Boolean);
+      }
+    }
+    return [];
+  }
+
+  return promotions.map(ev => {
+    const codeField = PLATFORM_CODE_FIELD[ev.platform];
+    return {
+      ...ev,
+      models: (ev.models || []).flatMap(m => {
+        const prods = findProducts(m.modelCode);
+        if (!prods.length) return [{ ...m, channelCode: '', baseSalePrice: '', shortModelName: '' }];
+        return prods.map(prod => ({
+          ...m,
+          channelCode: codeField ? (prod[codeField] || '') : '',
+          baseSalePrice: prod.salePrice || '',
+          shortModelName: prod.modelName || '',
+        }));
+      }),
+    };
+  });
+}
+
 /* GET /api/events — 프로모션 목록 반환 */
 app.get('/api/events', requireAuth, (req, res) => {
-  res.json(migrateToPromotions(readEvents()));
+  res.json(enrichEvents(migrateToPromotions(readEvents())));
 });
 
 /* POST /api/events — 프로모션 단위 등록 */
