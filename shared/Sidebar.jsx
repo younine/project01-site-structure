@@ -55,7 +55,6 @@ const BASE_NAV = [
     section: '가격비교',
     items: [
       { label: '모니터',           icon: 'monitor',   href: '/monitor.html' },
-      { label: '키보드',           icon: 'keyboard',  href: '/keyboard/' },
       { label: '네이버 검색 랭킹', icon: 'search',    href: '/nrank/' },
     ],
   },
