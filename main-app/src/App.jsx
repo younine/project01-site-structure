@@ -7,6 +7,8 @@ import NaverBrandRank from './components/NaverBrandRank';
 import LoginPage from './components/LoginPage';
 import AdminSettings from './components/AdminSettings';
 import CommunityPage from './components/CommunityPage';
+import NrankPage from './components/NrankPage';
+import EventsPage from './components/EventsPage';
 import './App.css';
 
 function TopBar({ lastUpdated, onRefresh, loading, onMenuClick }) {
@@ -87,10 +89,33 @@ export default function App() {
   const isLoginRoute = pathname === '/login';
   const isAdminSettings = /^\/admin-settings(\/)?$/.test(pathname);
   const isCommunity = /^\/community(\/|$)/.test(pathname);
+  const isNrank  = /^\/nrank(\/|$)/.test(pathname);
+  const isEvents = /^\/events(\/|$)/.test(pathname);
 
   if (isCommunity) {
     return (
       <CommunityPage
+        user={user}
+        hasPermission={hasPermission}
+        onLogout={async () => { await logout(); window.location.reload(); }}
+      />
+    );
+  }
+
+  if (isNrank) {
+    return (
+      <NrankPage
+        user={user}
+        hasPermission={hasPermission}
+        onLogout={async () => { await logout(); window.location.reload(); }}
+      />
+    );
+  }
+
+  if (isEvents) {
+    if (authLoading) return <div className="auth-loading">로딩 중...</div>;
+    return (
+      <EventsPage
         user={user}
         hasPermission={hasPermission}
         onLogout={async () => { await logout(); window.location.reload(); }}
