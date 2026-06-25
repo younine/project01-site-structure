@@ -1,0 +1,147 @@
+.cal-card { overflow: visible; }
+
+.cal-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cal-nav-btn {
+  background: none;
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  width: 26px;
+  height: 26px;
+  font-size: 16px;
+  color: var(--text2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.cal-nav-btn:hover { background: var(--surface2); color: var(--text); }
+
+.plat-legend {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.legend-dot {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: #fff;
+  border-radius: 99px;
+  padding: 2px 8px;
+  font-weight: 500;
+}
+
+.cal-body { padding: 0; }
+
+.cal-dow-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+
+.cal-dow {
+  text-align: center;
+  font-size: 10px;
+  color: var(--text3);
+  font-weight: 500;
+  padding: 6px 0;
+  text-transform: uppercase;
+}
+.cal-dow:first-child { color: #dc2626; }
+.cal-dow:last-child { color: #2563eb; }
+
+.cal-week {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  padding-bottom: 4px;
+}
+.cal-week:last-child { border-bottom: none; }
+
+.cal-day-nums {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.cal-day-num {
+  padding: 5px 0 3px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text2);
+  font-variant-numeric: tabular-nums;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cal-day-num:first-child { color: #dc2626; }
+.cal-day-num:nth-child(7) { color: #2563eb; }
+.cal-day-num.other-month { color: var(--text3); opacity: 0.4; }
+
+.today-badge {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cal-bars {
+  position: relative;
+  margin: 0 0 0;
+}
+
+.cal-bar {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+  transition: opacity 0.15s, box-shadow 0.15s;
+  opacity: 0.9;
+}
+.cal-bar:hover    { opacity: 1; filter: brightness(1.08); }
+.cal-bar.selected { opacity: 1; box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px currentColor; filter: brightness(1.05); }
+
+.bar-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── 툴팁 ── */
+.cal-tooltip {
+  background: var(--text);
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 11px;
+  line-height: 1.6;
+  pointer-events: none;
+  max-width: 220px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+
+.tt-platform { font-weight: 700; font-size: 10px; margin-bottom: 2px; }
+.tt-model { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+.tt-price { color: #fde68a; }
+.tt-date { color: #a5f3fc; font-size: 10px; margin-top: 2px; }
+.tt-memo { color: #d1d5db; font-size: 10px; margin-top: 2px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 4px; }
+.tt-hint { color: rgba(255,255,255,0.4); font-size: 9px; margin-top: 4px; }
