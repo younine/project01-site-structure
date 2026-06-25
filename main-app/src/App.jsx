@@ -9,6 +9,7 @@ import AdminSettings from './components/AdminSettings';
 import CommunityPage from './components/CommunityPage';
 import NrankPage from './components/NrankPage';
 import EventsPage from './components/EventsPage';
+import B2BPage from './components/B2BPage';
 import './App.css';
 
 function TopBar({ lastUpdated, onRefresh, loading, onMenuClick }) {
@@ -91,6 +92,7 @@ export default function App() {
   const isCommunity = /^\/community(\/|$)/.test(pathname);
   const isNrank  = /^\/nrank(\/|$)/.test(pathname);
   const isEvents = /^\/events(\/|$)/.test(pathname);
+  const isB2B    = /^\/b2b-order(\/|$)/.test(pathname);
 
   if (isCommunity) {
     return (
@@ -105,6 +107,17 @@ export default function App() {
   if (isNrank) {
     return (
       <NrankPage
+        user={user}
+        hasPermission={hasPermission}
+        onLogout={async () => { await logout(); window.location.reload(); }}
+      />
+    );
+  }
+
+  if (isB2B) {
+    if (authLoading) return <div className="auth-loading">로딩 중...</div>;
+    return (
+      <B2BPage
         user={user}
         hasPermission={hasPermission}
         onLogout={async () => { await logout(); window.location.reload(); }}
