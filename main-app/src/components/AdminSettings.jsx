@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { authFetch } from './authFetch';
 
 const SECTIONS = [
   { key: 'coupang', label: '쿠팡 수집기' },
@@ -37,14 +38,10 @@ export default function AdminSettings() {
   const [adding, setAdding] = useState(false);
   const [addError, setAddError] = useState('');
 
-  const token = localStorage.getItem('auth_token');
-
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/users', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await authFetch('/api/auth/users');
       if (!res.ok) throw new Error('조회 실패');
       setUsers(await res.json());
     } catch (e) {
@@ -60,9 +57,9 @@ export default function AdminSettings() {
     setSaving(user.id + key);
     const newPerms = buildPermissions(user.permissions, key, level);
     try {
-      const res = await fetch(`/api/auth/users/${user.id}/permissions`, {
+      const res = await authFetch(`/api/auth/users/${user.id}/permissions`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ permissions: newPerms }),
       });
       if (!res.ok) throw new Error('저장 실패');
@@ -78,9 +75,8 @@ export default function AdminSettings() {
   const deleteUser = async (user) => {
     if (!window.confirm(`"${user.username}" 계정을 삭제하시겠습니까?`)) return;
     try {
-      const res = await fetch(`/api/auth/users/${user.id}`, {
+      const res = await authFetch(`/api/auth/users/${user.id}`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
         const e = await res.json().catch(() => ({}));
@@ -97,9 +93,9 @@ export default function AdminSettings() {
     setAddError('');
     setAdding(true);
     try {
-      const res = await fetch('/api/auth/users', {
+      const res = await authFetch('/api/auth/users', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...newUser, permissions: [] }),
       });
       if (!res.ok) {

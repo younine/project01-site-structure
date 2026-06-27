@@ -22,11 +22,14 @@ export function matchProduct(productName, modelIndex) {
   if (!productName?.trim() || !modelIndex?.length) return { item: null, matched: false };
   const nameLower = productName.trim().toLowerCase();
   for (const [key, entry] of modelIndex) {
-    if (nameLower.includes(key)) {
-      const grade = /무결점/.test(productName) ? '무결점' : '일반';
-      const item = entry.grades[grade] || entry.grades['일반'] || null;
-      return { item, matched: !!item };
-    }
+    const idx = nameLower.indexOf(key);
+    if (idx === -1) continue;
+    // 키 매칭 직후 문자가 알파벳/숫자이면 단어 경계가 아님 (예: TFG27Q18P가 TFG27Q18PM에 오매칭 방지)
+    const nextChar = nameLower[idx + key.length];
+    if (nextChar !== undefined && /[a-z0-9]/.test(nextChar)) continue;
+    const grade = /무결점/.test(productName) ? '무결점' : '일반';
+    const item = entry.grades[grade] || entry.grades['일반'] || null;
+    return { item, matched: !!item };
   }
   return { item: null, matched: false };
 }

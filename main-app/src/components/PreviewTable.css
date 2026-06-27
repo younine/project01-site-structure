@@ -1,0 +1,21 @@
+/* PreviewTable.css — CoupangOrderPage 전용 */
+/* 글로벌 선택자(table/thead th/tbody tr/td)와 .btn은 App.css에서 관리 */
+
+.preview-section { margin-top: 16px; }
+
+/* 다운로드 버튼 행 */
+.btn-row { display: flex; gap: 10px; margin-top: 16px; align-items: center; flex-wrap: wrap; }
+
+/* 초기화 버튼 — App.css .btn 기반 + ghost 스타일 추가 */
+.btn-ghost { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); background: transparent; }
+
+/* 다운로드 형식 토글 */
+.dl-wrap { display: flex; align-items: center; gap: 8px; }
+.fmt-toggle { display: flex; border: 1px solid var(--border2); border-radius: 6px; overflow: hidden; }
+.fmt-btn { padding: 8px 16px; font-size: 12px; font-weight: 600; font-family: 'JetBrains Mono', monospace; cursor: pointer; border: none; background: var(--surface2); color: var(--text3); transition: all .15s; }
+.fmt-btn:first-child { border-right: 1px solid var(--border2); }
+.fmt-btn.active { background: var(--accent); color: #fff; }
+
+.total-info { margin-left: auto; font-size: 12px; color: var(--text3); }
+.total-info strong { color: var(--text); font-family: 'JetBrains Mono', monospace; }

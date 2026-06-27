@@ -1,0 +1,37 @@
+/* LogPanel.css — CoupangOrderPage 전용 */
+/* .stats-row/.stat-* 클래스는 .log-panel 아래로 스코프 한정 (B2B탭 CompuzoneTab 충돌 방지) */
+
+.log-panel { margin-top: 16px; }
+
+/* 통계 카드 — .log-panel 스코프 내에서만 4열 */
+.log-panel .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 16px; }
+@media (max-width: 600px) { .log-panel .stats-row { grid-template-columns: repeat(2,1fr); } }
+.log-panel .stat-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
+.log-panel .stat-val { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 600; color: var(--accent); }
+.log-panel .stat-label { font-size: 11px; color: var(--text-dim); margin-top: 3px; }
+
+.section-label.orange::before { background: var(--accent2); }
+
+.warn-box {
+  background: rgba(245,158,11,.08); border: 1px solid rgba(245,158,11,.3);
+  border-radius: var(--radius); padding: 12px 16px;
+  font-size: 12px; color: var(--accent2); margin-bottom: 14px; line-height: 1.8;
+}
+
+.progress-wrap { margin-bottom: 12px; }
+.progress-bar { height: 3px; background: var(--surface2); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--success)); transition: width .3s; border-radius: 2px; }
+.progress-info { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); }
+
+.log-area {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px;
+  max-height: 160px; overflow-y: auto;
+  font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.8;
+}
+.log-line { display: flex; gap: 10px; }
+.log-time { color: var(--text-muted); flex-shrink: 0; }
+.log-msg { color: var(--text-dim); }
+.log-ok .log-msg { color: var(--success); }
+.log-err .log-msg { color: var(--danger); }
+.log-info .log-msg { color: var(--accent2); }

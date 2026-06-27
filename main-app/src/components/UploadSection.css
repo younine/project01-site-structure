@@ -1,0 +1,35 @@
+/* UploadSection.css — CoupangOrderPage 전용 */
+/* .drop-zone/.drop-icon/.drop-title/.drop-sub/.drop-status 는 App.css에서 관리 */
+
+.upload-section { margin-bottom: 16px; }
+
+.section-label {
+  font-size: 11px; font-weight: 600; color: var(--text-dim);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.section-label::before {
+  content: ''; display: block; width: 3px; height: 14px;
+  background: var(--accent); border-radius: 2px;
+}
+.upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+@media (max-width: 640px) { .upload-grid { grid-template-columns: 1fr; } }
+.upload-label { font-size: 12px; color: var(--text-dim); margin-bottom: 8px; }
+.req { color: var(--danger); }
+.opt { color: var(--text-muted); }
+
+.config-row {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 16px; flex-wrap: wrap;
+}
+.config-label { font-size: 12px; color: var(--text-dim); white-space: nowrap; }
+.config-label strong { color: var(--text); }
+.config-input {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 6px; color: var(--text);
+  font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  padding: 7px 12px; outline: none; transition: border .2s; width: 180px;
+}
+.config-input:focus { border-color: var(--accent); }
+.config-hint { font-size: 11px; color: var(--text-muted); }
